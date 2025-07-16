@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Registration - Hackathon Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            line-height: 1.6;
+            color: #00ffff;
+            background: #0a0a0a;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        /* Particle System */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ffff;
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .signup-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.3),
+                inset 0 0 50px rgba(0, 255, 255, 0.05);
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .signup-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            animation: scan 2s infinite;
+        }
+
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .signup-header h1 {
+            font-family: 'Orbitron', monospace;
+            color: #00ffff;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 
+                0 0 5px #00ffff,
+                0 0 10px #00ffff,
+                0 0 20px #00ffff;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff; }
+            to { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+        }
+
+        .signup-header p {
+            color: #b8b8b8;
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .requirements {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .requirements:hover {
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .requirements h4 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+        }
+
+        .requirements ul {
+            color: #b8b8b8;
+            margin-left: 20px;
+        }
+
+        .requirements li {
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .requirements li:hover {
+            color: #00ffff;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #00ffff;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 0px;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            color: #00ffff;
+            font-family: 'Rajdhani', sans-serif;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(184, 184, 184, 0.7);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.3),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        .form-help {
+            font-size: 0.85rem;
+            color: #b8b8b8;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-help i {
+            color: #00ffff;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 18px;
+            background: transparent;
+            color: #00ffff;
+            border: 2px solid #00ffff;
+            border-radius: 0px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.3),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.5),
+                0 5px 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .form-footer {
+            text-align: center;
+            color: #b8b8b8;
+            font-size: 1rem;
+        }
+
+        .form-footer a {
+            color: #ff00ff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+
+        .form-footer a:hover {
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .navigation {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ffff;
+            text-decoration: none;
+            border: 1px solid #00ffff;
+            border-radius: 4px;
+            font-weight: 600;
+            font-family: 'Orbitron', monospace;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+
+        /* Input validation styles */
+        .form-group input:invalid {
+            border-color: rgba(255, 0, 0, 0.5);
+        }
+
+        .form-group input:valid {
+            border-color: rgba(0, 255, 0, 0.5);
+        }
+
+        /* Glitch effect for errors */
+        .error-message {
+            color: #ff4444;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            animation: glitch 0.3s ease-in-out;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            10% { transform: translate(-2px, 2px); }
+            20% { transform: translate(2px, -2px); }
+            30% { transform: translate(-2px, -2px); }
+            40% { transform: translate(2px, 2px); }
+            50% { transform: translate(-2px, 2px); }
+            60% { transform: translate(2px, -2px); }
+            70% { transform: translate(-2px, -2px); }
+            80% { transform: translate(2px, 2px); }
+            90% { transform: translate(-2px, 2px); }
+        }
+
+        @media (max-width: 768px) {
+            .signup-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .signup-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .form-group input {
+                padding: 12px;
+            }
+            
+            .btn-primary {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="particles"></div>
+
+    <div class="navigation">
+        <a href="index.html" class="nav-btn">
+            <i class="fas fa-arrow-left"></i> BACK TO MAIN
+        </a>
+    </div>
+
+    <div class="signup-container">
+        <div class="signup-header">
+            <h1><i class="fas fa-user-plus"></i> TEAM REGISTRATION</h1>
+            <p>Initialize your squad for the ultimate hackathon experience</p>
+        </div>
+
+        <div class="requirements">
+            <h4><i class="fas fa-shield-alt"></i> SYSTEM REQUIREMENTS</h4>
+            <ul>
+                <li>Unique team designation (alphanumeric + underscore)</li>
+                <li>Encrypted access credentials required</li>
+                <li>Valid communication protocols mandatory</li>
+            </ul>
+        </div>
+
+        <form method="post" action="signup.php" id="signupForm">
+            <div class="form-group">
+                <label for="team_name">TEAM DESIGNATION *</label>
+                <input type="text" id="team_name" name="team_name" required
+                       placeholder="Enter squad identifier" pattern="[A-Za-z0-9_]+"
+                       minlength="3" maxlength="32">
+                <div class="form-help">
+                    <i class="fas fa-microchip"></i>
+                    3-32 characters, alphanumeric and underscores only
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">ACCESS KEY *</label>
+                <input type="password" id="password" name="password" required
+                       placeholder="Generate secure access key" minlength="6">
+                <div class="form-help">
+                    <i class="fas fa-lock"></i>
+                    Minimum 6 characters for neural security
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">CONFIRM ACCESS KEY *</label>
+                <input type="password" id="confirm_password" name="confirm_password" required
+                       placeholder="Verify access key">
+                <div class="form-help">
+                    <i class="fas fa-check-double"></i>
+                    Must match primary access key
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-rocket"></i> INITIATE TEAM PROTOCOL
+            </button>
+        </form>
+
+        <div class="form-footer">
+            <p>Already have access? <a href="login.html">Login to system</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Particle System
+        function createParticles() {
+            const particleContainer = document.querySelector('.particles');
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particleContainer.appendChild(particle);
+            }
+        }
+
+        // Password confirmation validation
+        document.getElementById('confirm_password').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            
+            if (password !== confirmPassword) {
+                this.setCustomValidity('Access keys do not match');
+                this.style.borderColor = 'rgba(255, 0, 0, 0.5)';
+            } else {
+                this.setCustomValidity('');
+                this.style.borderColor = 'rgba(0, 255, 0, 0.5)';
+            }
+        });
+
+        // Team name validation
+        document.getElementById('team_name').addEventListener('input', function() {
+            const teamName = this.value;
+            const pattern = /^[A-Za-z0-9_]+$/;
+            
+            if (!pattern.test(teamName) && teamName !== '') {
+                this.setCustomValidity('Team designation must contain only letters, numbers, and underscores');
+                this.style.borderColor = 'rgba(255, 0, 0, 0.5)';
+            } else {
+                this.setCustomValidity('');
+                this.style.borderColor = teamName.length >= 3 ? 'rgba(0, 255, 0, 0.5)' : 'rgba(0, 255, 255, 0.3)';
+            }
+        });
+
+        // Initialize effects
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+        });
+
+        // Form submission with cyberpunk feedback
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            const button = document.querySelector('.btn-primary');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSING...';
+            button.disabled = true;
+            
+            // Re-enable after 3 seconds if form doesn't actually submit
+            setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-rocket"></i> INITIATE TEAM PROTOCOL';
+                button.disabled = false;
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
